@@ -1,0 +1,199 @@
+#include <iostream>
+using namespace std; 
+
+class nodo2{
+    private:
+      int id; 
+      char usuario[50]; 
+      char perfil[50]; 
+
+    friend class linkedlist; 
+};  
+
+class nodo{ 
+    private:
+      nodo2 dato; 
+      nodo *previous; 
+      nodo *next; 
+
+      friend class linkedlist;  
+      friend class nodo2; 
+}; 
+
+class linkedlist{
+    private: 
+      nodo *header; 
+      nodo *trailer; 
+    public:
+      linkedlist(); 
+      ~linkedlist();
+      nodo2 getfront() const;
+      nodo  getback() const; 
+      void addfront(); 
+      void addback();
+      void insInicio(nodo2); 
+      void insFinal(nodo2); 
+      void removefront(); 
+      void removeback(); 
+      void printforward(); 
+      void printReverse();
+      void mostrarfront(nodo2 datos);
+      void mostrarback(nodo2 datos); 
+      void continuar(void); 
+
+};
+
+linkedlist::linkedlist(){
+    header = new nodo; 
+    trailer = new nodo; 
+
+    header -> next = trailer; 
+    trailer -> previous = header;  
+
+    header -> previous = NULL; 
+    trailer -> next = NULL; 
+}
+
+linkedlist::~linkedlist(){
+    while(header -> next == trailer){ 
+       removefront(); 
+    }
+    delete header; 
+    delete trailer; 
+}
+
+ 
+
+nodo2 linkedlist::getfront()const{
+    return header -> next -> dato; 
+}
+
+nodo linkedlist::getback()const{
+    return *trailer -> previous -> next;  
+
+}
+
+void linkedlist::addfront(){
+    nodo2 datos;
+    
+    cout << endl; 
+    cout << "Id: "; cin >> datos.id; cin.ignore();
+    cout << "Usuario: "; cin.getline(datos.usuario,50);
+    cout << "Perfil (administrador, cliente o trabajador): "; cin.getline(datos.perfil,50);
+
+    insInicio(datos); 
+}
+
+void linkedlist::insInicio(nodo2 datos){
+    nodo *nd = new nodo; 
+
+    nd -> dato = datos;  
+    nd -> previous = header; 
+    nd -> next = header -> next; 
+    header -> next -> previous = nd;  
+    header -> next = nd; 
+}
+
+
+void linkedlist::addback(){
+    nodo2 datos;
+
+    cout << endl; 
+    cout << "Id: "; cin >> datos.id; cin.ignore(); 
+    cout << "Usuario: "; cin.getline(datos.usuario,50);
+    cout << "Perfil (administrador, cliente o trabajador): "; cin.getline(datos.perfil,50);
+
+    insFinal(datos); 
+}
+
+void linkedlist::insFinal(nodo2 datos){
+    nodo *nd = new nodo; 
+
+    nd -> dato = datos; 
+    nd -> previous = trailer -> previous; 
+    nd -> next = trailer; 
+    trailer -> previous -> next = nd;  
+    trailer -> previous = nd; 
+    
+}
+
+void linkedlist:: removefront(){
+    nodo *nd = header -> next -> next; 
+    delete header -> next; 
+    
+
+    header -> next = nd;  
+    nd -> previous = header; 
+
+}
+
+void linkedlist::removeback(){
+    nodo *nd = trailer -> previous -> previous;  
+    delete trailer -> previous; 
+    
+
+    
+    trailer -> previous = nd; 
+    nd -> next = trailer; 
+}
+void linkedlist::printforward(){ 
+    nodo *nd = header -> next; 
+
+    while(nd != trailer){ 
+        mostrarfront( nd -> dato); 
+        nd = nd -> next;  
+    } 
+
+}
+
+void linkedlist::mostrarfront(nodo2 datos){
+    cout << endl; 
+    cout << "Id: " << datos.id << endl;
+    cout << "Usuario: "<< datos.usuario << endl;
+    cout << "Perfil: " << datos.perfil << endl; 
+}
+
+void linkedlist::printReverse(){
+    nodo *nd = trailer -> previous; 
+
+    while(nd != header){ 
+        mostrarback(nd -> dato); 
+        nd = nd -> previous; 
+    } 
+}
+
+void linkedlist::mostrarback(nodo2 datos){
+    cout << endl; 
+    cout <<"Id: " << datos.id << endl; 
+    cout <<"Usuario: " << datos.usuario << endl; 
+    cout <<"Perfil: "<< datos.perfil << endl; 
+}
+
+int main (void){ 
+    linkedlist objeto; int s; 
+    cout << endl; 
+    cout << "INGRESE SUS DATOS" << endl; 
+    objeto.addfront();
+    objeto.addback(); 
+    objeto.addfront();
+    objeto.addback();
+    
+    cout << endl; 
+    cout << "DATOS GUARDADOS" << endl;
+    objeto.printforward(); 
+
+    cout << endl; 
+    cout << "DATOS GUARDADOS (AL REVES)" << endl; 
+    objeto.printReverse(); 
+
+    objeto.removefront(); 
+    objeto.removeback(); 
+    
+    cout << "PRIMER Y ULTIMO NODO" << endl; 
+    objeto.getfront();
+    objeto.getback();
+
+    return 0; 
+}
+
+//Fin //
