@@ -39,7 +39,6 @@ class linkedlist{
       void printReverse();
       void mostrarfront(nodo2 datos);
       void mostrarback(nodo2 datos); 
-      void continuar(void); 
 
 };
 
